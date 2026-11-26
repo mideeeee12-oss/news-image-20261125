@@ -115,15 +115,24 @@ def draw_globe_thermometer(draw, box):
     draw.ellipse([tx - 5, cy + r - 27, tx + 20, cy + r - 2], fill=RED)
 
 
-def draw_medical(draw, box):
-    """A white cross in a red roundel, with a map pin for the place."""
+def draw_warship(draw, box):
+    """A grey warship on a dark sea, and the drone that found it."""
     x0, y0, x1, y1 = box
-    cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
-    r = min(x1 - x0, y1 - y0) // 2 - 12
-    draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=RED)
-    w = r // 3
-    draw.rectangle([cx - w // 2, cy - r + 16, cx + w // 2, cy + r - 16], fill=(255, 255, 255))
-    draw.rectangle([cx - r + 16, cy - w // 2, cx + r - 16, cy + w // 2], fill=(255, 255, 255))
+    draw.rectangle(box, fill=(38, 54, 74))
+    sea_y = y1 - 16
+    draw.rectangle([x0, sea_y, x1, y1], fill=(24, 40, 58))
+    hx, hy = (x0 + x1) // 2, sea_y - 4
+    draw.polygon([(hx - 62, hy), (hx + 62, hy), (hx + 44, hy + 10), (hx - 44, hy + 10)], fill=(96, 104, 116))
+    draw.rectangle([hx - 34, hy - 14, hx + 20, hy], fill=(120, 128, 140))
+    draw.rectangle([hx - 6, hy - 26, hx + 8, hy - 14], fill=(120, 128, 140))
+    draw.line([hx + 1, hy - 26, hx + 1, hy - 38], fill=(160, 166, 176), width=3)
+    draw.line([hx - 30, hy - 10, hx - 52, hy - 16], fill=(70, 76, 86), width=5)
+    dx, dy = x0 + 34, y0 + 14
+    draw.line([dx - 10, dy - 6, dx + 10, dy + 6], fill=(220, 224, 230), width=4)
+    draw.line([dx - 10, dy + 6, dx + 10, dy - 6], fill=(220, 224, 230), width=4)
+    draw.ellipse([dx - 4, dy - 4, dx + 4, dy + 4], fill=RED)
+    for wx in range(x0 + 6, x1 - 20, 34):
+        draw.arc([wx, sea_y + 3, wx + 20, sea_y + 11], 0, 180, fill=(120, 160, 190), width=2)
 
 
 def draw_shanghai(draw, box):
@@ -151,23 +160,25 @@ def draw_shanghai(draw, box):
     draw.rectangle([x0, base, x1, y1], fill=(16, 18, 30))
 
 
-def draw_mercury(draw, box):
-    """A grey cratered planet and the little probe that reached it."""
+def draw_rocket(draw, box):
+    """A rocket lifting off into a starry sky, on a plume of fire."""
     x0, y0, x1, y1 = box
-    draw.rectangle(box, fill=(10, 12, 26))
-    for sx, sy in [(16, 12), (64, 30), (104, 8), (36, 62), (150, 52), (88, 74)]:
-        if x0 + sx < x1 - 6 and y0 + sy < y1 - 6:
+    draw.rectangle(box, fill=(12, 16, 36))
+    for sx, sy in [(14, 10), (52, 26), (96, 8), (30, 52), (104, 44), (66, 66)]:
+        if x0 + sx < x1 - 4 and y0 + sy < y1 - 40:
             draw.ellipse([x0 + sx, y0 + sy, x0 + sx + 3, y0 + sy + 3], fill=(230, 232, 240))
-    r = min(46, (y1 - y0) // 2 - 4)
-    cx, cy = x0 + r + 8, (y0 + y1) // 2
-    draw.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(168, 164, 158))
-    for dx, dy, dr in [(-r // 3, -r // 4, r // 5), (r // 4, r // 8, r // 4), (-r // 8, r // 3, r // 6), (r // 3, -r // 3, r // 7)]:
-        draw.ellipse([cx + dx - dr, cy + dy - dr, cx + dx + dr, cy + dy + dr], outline=(128, 124, 118), width=3)
-    px, py = x1 - 44, y0 + (y1 - y0) // 3
-    draw.rectangle([px - 8, py - 8, px + 8, py + 8], fill=(222, 200, 130))
-    draw.rectangle([px - 34, py - 6, px - 11, py + 6], fill=(64, 116, 190))
-    draw.rectangle([px + 11, py - 6, px + 34, py + 6], fill=(64, 116, 190))
-    draw.line([px, py + 8, px - 12, py + 24], fill=(200, 200, 200), width=3)
+    cx = (x0 + x1) // 2
+    top, base = y0 + 10, y1 - 34
+    draw.polygon([(cx - 13, base), (cx - 13, top + 16), (cx, top), (cx + 13, top + 16), (cx + 13, base)], fill=(238, 236, 228))
+    draw.rectangle([cx - 13, base - 12, cx + 13, base - 4], fill=RED)
+    draw.ellipse([cx - 5, top + 20, cx + 5, top + 30], fill=NAVY)
+    draw.polygon([(cx - 13, base - 8), (cx - 24, base + 8), (cx - 13, base + 6)], fill=(150, 156, 168))
+    draw.polygon([(cx + 13, base - 8), (cx + 24, base + 8), (cx + 13, base + 6)], fill=(150, 156, 168))
+    draw.polygon([(cx - 8, base), (cx, base + 22), (cx + 8, base)], fill=(244, 160, 60))
+    draw.polygon([(cx - 4, base), (cx, base + 13), (cx + 4, base)], fill=(250, 214, 120))
+    for dx, r in [(-30, 12), (-12, 15), (10, 16), (28, 11)]:
+        draw.ellipse([cx + dx - r, y1 - 18 - r // 2, cx + dx + r, y1 - 18 + r // 2], fill=(214, 216, 220))
+    draw.rectangle([x0, y1 - 6, x1, y1], fill=(8, 10, 22))
 
 
 # --- the page -----------------------------------------------------------------
@@ -180,16 +191,16 @@ STORIES = {
     'lead': {
         'kicker': 'MIDDLE EAST · STRAIT OF HORMUZ',
         'headline': 'Hormuz Crisis Deepens as Iran Warns Shipping',
-        'body': 'Tankers were hit by mines in the strait. Iran ruled out talks with '
-                'the US unless seven conditions are met. A Houthi attack on '
-                'Riyadh injured 11 people.',
+        'body': 'Iran says mines hit four tankers in the strait; the US disputes '
+                'the claim. A Houthi attack on a Riyadh tower injured 11, '
+                'and talks with Washington are ruled out.',
         'art': draw_tanker,
     },
     'panels': [
         {
             'kicker': 'US · TECH VERDICT',
             'headline': 'Huawei Guilty of Stealing Trade Secrets',
-            'body': 'Guilty on 10 of 12 counts in the New York trial.',
+            'body': 'Convicted of conspiracy in New York; cleared of racketeering.',
             'art': draw_chip,
         },
         {
@@ -199,10 +210,10 @@ STORIES = {
             'art': draw_globe_thermometer,
         },
         {
-            'kicker': 'AFRICA · HEALTH',
-            'headline': 'WHO Evacuates Ebola Staff in Congo',
-            'body': 'Evacuated from an Ituri hospital amid fighting.',
-            'art': draw_medical,
+            'kicker': 'EUROPE · WAR AT SEA',
+            'headline': 'Ukraine Drones Sink Russian Warship in Libya',
+            'body': 'Kyiv’s drones hit Russian ships from the Baltic to Benghazi.',
+            'art': draw_warship,
         },
     ],
     'wide': [
@@ -213,16 +224,16 @@ STORIES = {
             'art': draw_shanghai,
         },
         {
-            'kicker': 'SCIENCE · SPACE',
-            'headline': 'Europe–Japan Probe Reaches Mercury',
-            'body': 'BepiColombo arrives after an eight-year journey.',
-            'art': draw_mercury,
+            'kicker': 'ASIA · SPACE',
+            'headline': 'Pakistan’s First Astronaut in Orbit',
+            'body': 'Shenzhou-24 takes Muhammad Zeeshan Ali to space.',
+            'art': draw_rocket,
         },
     ],
     'ticker': [
         'SENEGAL REGAIN AFRICA CUP TITLE IN COURT RULING',
-        'CIA & ODNI HIT BY CYBERATTACK',
-        'INDONESIA VP GIBRAN RESIGNS',
+        'WHO EVACUATES EBOLA STAFF IN CONGO',
+        'COLOMBIA FREES SUPERMARKET HOSTAGES',
     ],
 }
 
@@ -244,7 +255,7 @@ def wide_panel(draw, box, story):
     story['art'](draw, (x0 + 14, y0 + 14, x0 + 134, y1 - 14))
     tx = x0 + 162
     draw.text((tx, y0 + 12), story['kicker'], font=font(SANS_BOLD, 16), fill=RED)
-    y = text_block(draw, (tx, y0 + 36), story['headline'], font(SERIF_BOLD, 25), INK, x1 - tx - 14, 1.1)
+    y = text_block(draw, (tx, y0 + 36), story['headline'], font(SERIF_BOLD, 23), INK, x1 - tx - 14, 1.1)
     text_block(draw, (tx, y + 6), story['body'], font(SANS, 18), (52, 49, 44), x1 - tx - 14, 1.2)
 
 
@@ -282,7 +293,7 @@ def main():
     draw.rectangle([36, 980, W - 36, 1012], fill=NAVY)
     ticker = 'ALSO TODAY   •   ' + '    •    '.join(STORIES['ticker'])
     size = 19
-    while draw.textlength(ticker, font=font(SANS_BOLD, size)) > W - 110 and size > 12:
+    while draw.textlength(ticker, font=font(SANS_BOLD, size)) > W - 76 and size > 10:
         size -= 1
     draw.text((512, 986), ticker, font=font(SANS_BOLD, size), fill=(246, 239, 220), anchor='ma')
 
